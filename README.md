@@ -1,11 +1,3 @@
-I can see your README.md doesn't have the flow diagrams! Let's add them properly. Here's the complete README.md with beautiful flow diagrams:
-
-## Step 1: Replace Your README.md Content
-
-Copy and paste this entire content into your README.md file:
-
-```markdown
-# AI Agent Challenge - Bank Statement Parser
 
 A professional AI coding agent that automatically generates custom bank statement parsers using LangGraph architecture and local LLMs (Ollama).
 
