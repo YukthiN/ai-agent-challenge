@@ -1,0 +1,7 @@
+﻿langgraph>=0.0.40
+ollama>=0.1.7
+pdfplumber>=0.10.0
+pandas>=1.5.0
+pytest>=7.0.0
+python-dotenv>=1.0.0
+pymupdf>=1.22.0
