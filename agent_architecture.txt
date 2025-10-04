@@ -1,0 +1,32 @@
+
+LangGraph Agent Architecture:
+
+                AGENT WORKFLOW                   
+
+                                                 
+  [START]                                       
+                                               
+                                               
+                                 
+     ANALYZE     Analyze PDF & CSV structure 
+                                 
+                                               
+                                               
+                                 
+    GENERATE     Create parser code          
+                                 
+                                               
+                                               
+                                 
+      TEST       Validate against CSV        
+                                 
+                                               
+                                               
+                  
+     REFINE?       GENERATE      
+                
+                                            
+                                            
+  [SUCCESS]                 [FAILED]   
+                                   (max 3 attempts)
+

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Demo Script for AI Agent Challenge
 Shows the complete workflow from start to finish
@@ -38,7 +38,7 @@ def main():
     
     # 2. Run the agent
     print("\n2.  RUNNING AI AGENT")
-    run_command("python agent_final.py --target icici", "AI Agent Generating Parser")
+    run_command("python agent.py --target icici", "AI Agent Generating Parser")
     
     # 3. Test the generated parser
     print("\n3.  TESTING GENERATED PARSER")

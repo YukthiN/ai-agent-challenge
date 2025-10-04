@@ -1,8 +1,8 @@
 ﻿import pytest
 import sys
 from pathlib import Path
-import pandas as pd  # Add this import
-from agent_final import WorkingCodingAgent
+import pandas as pd
+from agent import WorkingCodingAgent  # Changed from agent_final
 
 class TestAgent:
     def test_agent_initialization(self):
@@ -31,7 +31,7 @@ class TestAgent:
         try:
             from icici_parser import parse
             result_df = parse("data/icici/icici sample.pdf")
-            assert isinstance(result_df, pd.DataFrame)  # Fixed this line
+            assert isinstance(result_df, pd.DataFrame)
             assert len(result_df.columns) > 0
             print(f" Parser test passed: {result_df.shape} shape, {len(result_df.columns)} columns")
         except Exception as e:

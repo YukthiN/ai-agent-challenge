@@ -3,8 +3,9 @@ import pandas as pd
 from pathlib import Path
 import importlib.util
 import sys
-from typing import TypedDict
+from typing import TypedDict, Literal
 from langgraph.graph import StateGraph, END
+import ollama
 
 class AgentState(TypedDict):
     target_bank: str
@@ -15,14 +16,14 @@ class AgentState(TypedDict):
     test_results: dict
     attempt: int
     max_attempts: int
-    status: str
+    status: Literal["planning", "generating", "testing", "refining", "success", "failed"]
 
 class WorkingCodingAgent:
     def __init__(self):
         self.graph = self._create_agent_graph()
     
     def _create_agent_graph(self):
-        """Create LangGraph workflow for clear architecture"""
+        """Create LangGraph workflow with visualization capability"""
         builder = StateGraph(AgentState)
         
         # Add nodes
@@ -45,6 +46,61 @@ class WorkingCodingAgent:
         builder.add_edge("refine", "generate")
         
         return builder.compile()
+    
+    def visualize_architecture(self, output_file: str = "agent_architecture.png"):
+        """Generate and save architecture visualization"""
+        try:
+            # Method 1: Try to use LangGraph's built-in visualization
+            try:
+                self.graph.get_graph().draw_mermaid_png(output_file=output_file)
+                print(f" Architecture diagram saved as: {output_file}")
+                return True
+            except:
+                pass
+            
+            # Method 2: Create a simple text-based diagram
+            architecture_diagram = '''
+LangGraph Agent Architecture:
+
+                AGENT WORKFLOW                   
+
+                                                 
+  [START]                                       
+                                               
+                                               
+                                 
+     ANALYZE     Analyze PDF & CSV structure 
+                                 
+                                               
+                                               
+                                 
+    GENERATE     Create parser code          
+                                 
+                                               
+                                               
+                                 
+      TEST       Validate against CSV        
+                                 
+                                               
+                                               
+                  
+     REFINE?       GENERATE      
+                
+                                            
+                                            
+  [SUCCESS]                 [FAILED]   
+                                   (max 3 attempts)
+
+'''
+            with open("agent_architecture.txt", "w", encoding="utf-8") as f:
+                f.write(architecture_diagram)
+            print(" Architecture diagram saved as: agent_architecture.txt")
+            print(architecture_diagram)
+            return True
+            
+        except Exception as e:
+            print(f"  Visualization failed: {e}")
+            return False
     
     def analyze_node(self, state: AgentState) -> AgentState:
         """Analyze the PDF and CSV structure"""
@@ -264,10 +320,15 @@ def parse(pdf_path: str) -> pd.DataFrame:
         else:
             return "end"
     
-    def run(self, target_bank: str):
+    def run(self, target_bank: str, visualize: bool = False):
         """Run the complete agent workflow"""
         print(f" Starting Professional Agent for {target_bank.upper()}")
         print("=" * 60)
+        
+        # Generate architecture visualization if requested
+        if visualize:
+            print(" Generating LangGraph architecture visualization...")
+            self.visualize_architecture()
         
         # Set up paths
         pdf_path = f"data/{target_bank}/icici sample.pdf"
@@ -315,11 +376,12 @@ def main():
     """Main CLI entry point"""
     parser = argparse.ArgumentParser(description="Professional AI Agent for Bank Statement Parsers")
     parser.add_argument("--target", required=True, help="Target bank name (e.g., icici)")
+    parser.add_argument("--visualize", action="store_true", help="Generate architecture diagram")
     
     args = parser.parse_args()
     
     agent = WorkingCodingAgent()
-    result = agent.run(args.target)
+    result = agent.run(args.target, visualize=args.visualize)
     
     # Final verification
     if result["test_results"].get("success"):
